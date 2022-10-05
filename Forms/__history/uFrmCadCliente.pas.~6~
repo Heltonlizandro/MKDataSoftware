@@ -1,0 +1,67 @@
+unit uFrmCadCliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uFrmCadPadrao, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, ppDB, ppParameter, ppDesignLayer, ppBands,
+  ppCtrls, ppVar, ppPrnabl, ppClass, ppCache, ppProd, ppReport, ppComm,
+  ppRelatv, ppDBPipe, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids,
+  Vcl.DBGrids, RxDBCtrl, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Vcl.Mask,
+  Vcl.StdCtrls;
+
+type
+  TFrmCadCliente = class(TFrmCadPadrao)
+    Label1: TLabel;
+    Label2: TLabel;
+    lbCPF_CNPJ: TLabel;
+    EdtCodigo: TEdit;
+    EdtNome: TEdit;
+    EdtCPF_CNPJ: TMaskEdit;
+    procedure AtualizaDadosGrid(Sender : TObject); override;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure ChamaMnt; Override;
+  end;
+
+var
+  FrmCadCliente: TFrmCadCliente;
+
+implementation
+
+{$R *.dfm}
+
+{ TFrmCadCliente }
+
+procedure TFrmCadCliente.AtualizaDadosGrid(Sender: TObject);
+begin
+  oPessoa.ANO      := FrmPrincipal.cbPeriodoLetivo.Text;
+  oPessoa.CODIGO   := StrToIntDef(EdtCodigo.Text,0);
+  oPessoa.NOME     := Trim(EdtNome.Text);
+  oPessoa.CPF_CNPJ := Trim(EdtCPF_CNPJ.Text);
+
+  oPessoa.CarregaDataSet(SqlDados);
+
+
+
+end;
+
+procedure TFrmCadCliente.ChamaMnt;
+begin
+  FrmMntPessoa.ChamaManutencao(dsDados.DataSet,Botao);
+  inherited;
+end;
+
+end.procedure TFrmCadCliente.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+end;
+
+

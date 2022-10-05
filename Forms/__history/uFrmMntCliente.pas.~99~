@@ -1,0 +1,589 @@
+unit uFrmMntCliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uFrmMntPadrao, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Imaging.pngimage,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons,
+  Vcl.Imaging.jpeg, Vcl.Mask, RxToolEdit, uTCliente, uFrmPadrao,
+  Datasnap.DBClient;
+
+type
+  TFrmMntCliente = class(TFrmMntPadrao)
+    PageControlPessoa: TPageControl;
+    tsDadosPessoais: TTabSheet;
+    Label1: TLabel;
+    Label5: TLabel;
+    lbCPF_CNPJ: TLabel;
+    Label41: TLabel;
+    EdtCodigo: TEdit;
+    EdtNome: TEdit;
+    rgTipoPessoa: TRadioGroup;
+    EdtCPF_CNPJ: TMaskEdit;
+    tsFones: TTabSheet;
+    PanelBotaoFones: TPanel;
+    BtnInserir: TBitBtn;
+    btnAlterar: TBitBtn;
+    BtnExcFone: TBitBtn;
+    btnGravFone: TBitBtn;
+    btnCancFone: TBitBtn;
+    PanelGridFone: TPanel;
+    GridFone: TDBGrid;
+    PanelDadosFone: TPanel;
+    tsEnderecos: TTabSheet;
+    PanelAnotFinanc: TPanel;
+    Panel1: TPanel;
+    GridEnderecos: TDBGrid;
+    Panel11: TPanel;
+    BtnInsEnd: TBitBtn;
+    BtnAltEnd: TBitBtn;
+    BtnExcEnd: TBitBtn;
+    BtnGravEnd: TBitBtn;
+    BtnCancEnd: TBitBtn;
+    cdsTelefones: TClientDataSet;
+    cdsTelefonesTELEFONE: TStringField;
+    cdsTelefonesSTATUS: TStringField;
+    cdsTelefonesOBSERVACAO: TStringField;
+    dsTelefone: TDataSource;
+    Label24: TLabel;
+    EdtTelefone: TMaskEdit;
+    Label43: TLabel;
+    EdtObsFone: TEdit;
+    CdsEnderecos: TClientDataSet;
+    CdsEnderecosSTATUS: TStringField;
+    dsEnderecos: TDataSource;
+    CdsEnderecosLOGRADOURO: TStringField;
+    CdsEnderecosENDERECO: TStringField;
+    CdsEnderecosCEP: TStringField;
+    CdsEnderecosNUMERO: TStringField;
+    CdsEnderecosBAIRRO: TStringField;
+    CdsEnderecosCIDADE: TStringField;
+    CdsEnderecosESTADO: TStringField;
+    CdsEnderecosPAIS: TStringField;
+    PanelEnderecos: TPanel;
+    sqlPesqTipoFone: TFDQuery;
+    sqlPesqTipoFoneDESCRICAO: TStringField;
+    sqlPesqTipoFoneCODIGO: TIntegerField;
+    rgSituacao: TRadioGroup;
+    lbRgIe: TLabel;
+    Edit1: TEdit;
+    Label21: TLabel;
+    EdtCEP: TMaskEdit;
+    Label3: TLabel;
+    EdtEndereco: TEdit;
+    Label37: TLabel;
+    EdtNumero: TEdit;
+    Label6: TLabel;
+    EdtCidade: TEdit;
+    Label7: TLabel;
+    EdtUF: TComboBox;
+    PanelConsultaCEP: TPanel;
+    ImgConsultaCEP: TImage;
+    Label40: TLabel;
+    EdtBairro: TEdit;
+    procedure BtnInserirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnGravFoneClick(Sender: TObject);
+    procedure btnCancFoneClick(Sender: TObject);
+    procedure BtnExcFoneClick(Sender: TObject);
+    procedure EdtObsFoneExit(Sender: TObject);
+
+    procedure HabilitaBotaoFone(Sender: TObject);
+    procedure HabilitaBotaoEndereco(Sender: TObject);
+    procedure EdtCPF_CNPJExit(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure rgTipoPessoaClick(Sender: TObject);
+    procedure ImgConsultaCEPClick(Sender: TObject);
+    procedure BtnInsEndClick(Sender: TObject);
+    procedure BtnAltEndClick(Sender: TObject);
+    procedure BtnGravEndClick(Sender: TObject);
+    procedure BtnCancEndClick(Sender: TObject);
+    procedure dsTelefoneStateChange(Sender: TObject);
+    procedure dsEnderecosStateChange(Sender: TObject);
+    procedure BtnExcEndClick(Sender: TObject);
+  private
+    { Private declarations }
+    function  ValidaTelefone(Fone : String): String;
+    procedure ValidaDuplicidadeCPF_CNPJ;
+  public
+    { Public declarations }
+    oCliente : TCliente;
+    ListaDados : TStrings;
+
+    procedure ChamaManutencao(sDataSet: TDataSet; sBotao : TBotao; ListaDadosFilho : TStrings = nil; sPaiMae : String = '');
+    procedure PreencheDados; Override;
+  protected
+    function  ValidaCadastro: Boolean; Override;
+    procedure SalvaCadastro; Override;
+
+  end;
+
+var
+  FrmMntCliente: TFrmMntCliente;
+
+implementation
+
+uses uFrmPrincipal, uDM, F_Funcao;
+
+{$R *.dfm}
+
+{ TFrmMntCliente }
+
+procedure TFrmMntCliente.BtnAltEndClick(Sender: TObject);
+begin
+  inherited;
+  if CdsEnderecos.IsEmpty then
+  begin
+    MessageDlg('Não existem dados para Alteração.', mtInformation, [mbOk],0);
+    Abort;
+  end;
+
+  GridEnderecos.Enabled   := False;
+  EdtCEP.Text      := CdsEnderecosCEP.AsString;
+  EdtEndereco.Text := CdsEnderecosLOGRADOURO.AsString;
+  EdtNumero.Text   := CdsEnderecosNUMERO.AsString;
+  EdtBairro.Text   := CdsEnderecosBAIRRO.AsString;
+  EdtCidade.Text   := CdsEnderecosCIDADE.AsString;
+  EdtUF.ItemIndex  := EdtUF.Items.IndexOf(CdsEnderecosESTADO.AsString);
+
+  CdsEnderecos.Edit;
+
+  HabilitaBotaoEndereco(Sender);
+end;
+
+procedure TFrmMntCliente.btnAlterarClick(Sender: TObject);
+begin
+  if cdsTelefones.IsEmpty then
+  begin
+    MessageDlg('Não existem dados para Alteração.', mtInformation, [mbOk],0);
+    Abort;
+  end;
+
+  GridFone.Enabled   := False;
+  EdtTelefone.Text   := cdsTelefonesTELEFONE.AsString;
+  EdtObsFone.Text    := cdsTelefonesOBSERVACAO.AsString;
+
+//  VerificaMascaraFone(cdsTelefonesCOD_TIPO_FONE.AsString);
+
+  cdsTelefones.Edit;
+
+  HabilitaBotaoFone(Sender);
+end;
+
+procedure TFrmMntCliente.BtnCancEndClick(Sender: TObject);
+begin
+  inherited;
+  CdsEnderecos.Cancel;
+  HabilitaBotaoEndereco(Sender);
+  GridEnderecos.Enabled   := True;
+end;
+
+procedure TFrmMntCliente.btnCancFoneClick(Sender: TObject);
+begin
+  inherited;
+  cdsTelefones.Cancel;
+  HabilitaBotaoFone(Sender);
+  GridFone.Enabled   := True;
+end;
+
+procedure TFrmMntCliente.BtnExcEndClick(Sender: TObject);
+begin
+  inherited;
+  if MessageDlg('Confirma a Exclusão do Registro Selecionado?', mtConfirmation, mbOKCancel,0) = 1 then
+  begin
+    CdsEnderecos.Edit;
+    CdsEnderecosSTATUS.AsString := 'E';
+    CdsEnderecos.Post;
+  end;
+end;
+
+procedure TFrmMntCliente.BtnExcFoneClick(Sender: TObject);
+begin
+  inherited;
+  if MessageDlg('Confirma a Exclusão do Registro Selecionado?', mtConfirmation, mbOKCancel,0) = 1 then
+  begin
+    cdsTelefones.Edit;
+    cdsTelefonesSTATUS.AsString := 'E';
+    cdsTelefones.Post;
+  end;
+end;
+
+procedure TFrmMntCliente.BtnGravEndClick(Sender: TObject);
+begin
+  inherited;
+  case CdsEnderecos.State of
+    dsEdit:
+    begin
+      CdsEnderecosSTATUS.AsString := 'A';
+    end;
+
+    dsInsert:
+    begin
+      CdsEnderecosSTATUS.AsString := 'I';
+    end;
+  end;
+
+  if not GridEnderecos.Enabled then
+    GridEnderecos.Enabled := True;
+
+  CdsEnderecosCEP.AsString        := EdtCEP.Text;
+  CdsEnderecosLOGRADOURO.AsString := EdtEndereco.Text;
+  CdsEnderecosNUMERO.AsString     := EdtNumero.Text;
+  CdsEnderecosBAIRRO.AsString     := EdtBairro.Text;
+  CdsEnderecosCIDADE.AsString     := EdtCidade.Text;
+  CdsEnderecosESTADO.AsString     := EdtUF.Text;
+
+  CdsEnderecos.Post;
+  HabilitaBotaoEndereco(Sender);
+end;
+
+procedure TFrmMntCliente.btnGravFoneClick(Sender: TObject);
+begin
+  case cdsTelefones.State of
+    dsEdit:
+    begin
+      cdsTelefonesSTATUS.AsString := 'A';
+    end;
+
+    dsInsert:
+    begin
+      cdsTelefonesSTATUS.AsString := 'I';
+    end;
+  end;
+
+  if not GridFone.Enabled then
+    GridFone.Enabled := True;
+
+  cdsTelefonesTELEFONE.AsString       := ValidaTelefone(Trim(EdtTelefone.Text));
+  cdsTelefonesOBSERVACAO.AsString     := Trim(EdtObsFone.Text);
+
+  cdsTelefones.Post;
+  HabilitaBotaoFone(Sender);
+end;
+
+procedure TFrmMntCliente.BtnInsEndClick(Sender: TObject);
+begin
+  inherited;
+  EdtCEP.Text      := EmptyStr;
+  EdtEndereco.Text := EmptyStr;
+  EdtNumero.Text   := EmptyStr;
+  EdtBairro.Text   := EmptyStr;
+  EdtCidade.Text   := EmptyStr;
+  EdtUF.ItemIndex  := -1;
+
+  CdsEnderecos.Insert;
+
+  HabilitaBotaoEndereco(Sender);
+end;
+
+procedure TFrmMntCliente.BtnInserirClick(Sender: TObject);
+begin
+  EdtTelefone.Text   := EmptyStr;
+  EdtObsFone.Text    := EmptyStr;
+
+  cdsTelefones.Insert;
+
+  HabilitaBotaoFone(Sender);
+end;
+
+procedure TFrmMntCliente.ChamaManutencao(sDataSet: TDataSet; sBotao: TBotao;
+  ListaDadosFilho: TStrings; sPaiMae: String);
+var
+  FrmMntCliente : TFrmMntCliente;
+begin
+  try
+    FrmMntCliente := TFrmMntCliente.Create(nil);
+    with FrmMntCliente do
+    begin
+      dsDados.DataSet := sDataSet;
+      Botao := sBotao;
+
+      if ListaDadosFilho <> nil then
+        ListaDados := ListaDadosFilho;
+
+      PreencheDados;
+      ShowModal;
+    end;
+  finally
+    FreeAndNil(FrmMntCliente);
+  end;
+end;
+
+procedure TFrmMntCliente.dsEnderecosStateChange(Sender: TObject);
+begin
+  inherited;
+  PanelEnderecos.Enabled :=  CdsEnderecos.State in [dsInsert, dsEdit];
+end;
+
+procedure TFrmMntCliente.dsTelefoneStateChange(Sender: TObject);
+begin
+  inherited;
+  PanelDadosFone.Enabled :=  cdsTelefones.State in [dsInsert, dsEdit];
+end;
+
+procedure TFrmMntCliente.EdtCPF_CNPJExit(Sender: TObject);
+begin
+  inherited;
+  if (not PanelSair.Focused) then
+  begin
+    if (Trim(EdtCPF_CNPJ.Text) <> EmptyStr) then
+    begin
+      case rgTipoPessoa.ItemIndex of
+        0:
+        begin
+          if not TValidacao.CPF(EdtCPF_CNPJ.Text) then
+          begin
+            PageControlPessoa.ActivePage := tsDadosPessoais;
+            EdtCPF_CNPJ.SetFocus;
+            Abort;
+          end;
+        end;
+        1:
+        begin
+          if not TValidacao.CGC(EdtCPF_CNPJ.Text) then
+          begin
+            PageControlPessoa.ActivePage := tsDadosPessoais;
+            EdtCPF_CNPJ.SetFocus;
+            Abort;
+          end;
+        end;
+      end;
+      ValidaDuplicidadeCPF_CNPJ;
+    end;
+  end;
+end;
+
+procedure TFrmMntCliente.EdtObsFoneExit(Sender: TObject);
+begin
+  inherited;
+  if btnGravFone.CanFocus then
+    btnGravFone.SetFocus;
+end;
+
+procedure TFrmMntCliente.FormCreate(Sender: TObject);
+begin
+  inherited;
+  oCliente := TCliente.Create(SqlAuxiliar);
+  cdsTelefones .CreateDataSet;
+  cdsEnderecos.CreateDataSet;
+  PageControlPessoa.ActivePage := tsDadosPessoais;
+  rgTipoPessoaClick(rgTipoPessoa);
+end;
+
+procedure TFrmMntCliente.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  FreeAndNil(oCliente);
+end;
+
+procedure TFrmMntCliente.HabilitaBotaoEndereco(Sender: TObject);
+begin
+  BtnInsEnd .Enabled := not BtnInsEnd .Enabled;
+  BtnAltEnd .Enabled := not BtnAltEnd .Enabled;
+  BtnGravEnd.Enabled := not BtnGravEnd.Enabled;
+  BtnCancEnd.Enabled := not BtnCancEnd.Enabled;
+
+  if CdsEnderecos.State in [dsInsert, dsEdit] then
+    EdtCEP.SetFocus
+end;
+
+procedure TFrmMntCliente.HabilitaBotaoFone(Sender: TObject);
+begin
+  BtnInserir .Enabled := not BtnInserir .Enabled;
+  btnAlterar .Enabled := not btnAlterar .Enabled;
+  btnGravFone.Enabled := not btnGravFone.Enabled;
+  btnCancFone.Enabled := not btnCancFone.Enabled;
+  if cdsTelefones.State in [dsInsert, dsEdit] then
+    EdtTelefone.SetFocus;
+end;
+
+procedure TFrmMntCliente.ImgConsultaCEPClick(Sender: TObject);
+begin
+  inherited;
+
+  oCliente.ConsultaCEP(EdtCEP.Text);
+  if oCliente.Endereco.LOGRADOURO <> Emptystr then
+  begin
+    EdtEndereco.Text    := oCliente.Endereco.Logradouro;
+    EdtBairro  .Text    := oCliente.Endereco.Bairro;
+    EdtCidade  .Text    := oCliente.Endereco.Cidade;
+    EdtUF.ItemIndex     := EdtUF.Items.IndexOf(oCliente.Endereco.UF);
+  end;
+end;
+
+procedure TFrmMntCliente.PreencheDados;
+begin
+  if Botao = btAlterar then
+  begin
+    oCliente.CODIGO := dsDados.DataSet.FieldByName('CODIGO').AsInteger;
+    oCliente.CarregaFones(cdsTelefones);
+    oCliente.CarregaEnderecos(CdsEnderecos);
+
+
+    EdtCodigo  .Text := dsDados.DataSet.FieldByName('CODIGO').AsString;
+    EdtNome    .Text := dsDados.DataSet.FieldByName('NOME').AsString;
+    EdtCPF_CNPJ.Text := dsDados.DataSet.FieldByName('CPF_CNPJ').AsString;
+
+
+    if dsDados.DataSet.FieldByName('TIPO_PESSOA').AsString <> EmptyStr then
+    begin
+      case dsDados.DataSet.FieldByName('TIPO_PESSOA').AsString[1] of
+        'F': rgTipoPessoa.ItemIndex := 0;
+        'J': rgTipoPessoa.ItemIndex := 1;
+      end;
+    end;
+    rgTipoPessoaClick(rgTipoPessoa);
+
+    if dsDados.DataSet.FieldByName('ATIVO').AsString <> EmptyStr then
+    begin
+      case dsDados.DataSet.FieldByName('ATIVO').AsString[1] of
+        'S': rgSituacao.ItemIndex := 0;
+        'N': rgSituacao.ItemIndex := 1;
+      end;
+    end;
+
+    MaxLengthZeroEsquerda(EdtCodigo);
+  end
+  else
+  begin
+    EdtCodigo.Text := '';
+  end;
+end;
+
+procedure TFrmMntCliente.rgTipoPessoaClick(Sender: TObject);
+begin
+  inherited;
+  case rgTipoPessoa.ItemIndex of
+    0:
+    begin
+      EdtCPF_CNPJ.EditMask := '!999.999.999-99;0; ';
+      lbCPF_CNPJ.Caption   := 'CPF';
+      lbRgIe.Caption       := 'RG';
+    end;
+    1:
+    begin
+      EdtCPF_CNPJ.EditMask := '!99.999.999/9999-99;0; ';
+      lbCPF_CNPJ.Caption   := 'CNPJ';
+      lbRgIe.Caption       := 'IE';
+    end;
+  end;
+end;
+
+procedure TFrmMntCliente.SalvaCadastro;
+var
+  sValues, sCampos : String;
+begin
+  //Executa o padrão
+  inherited;
+
+  sValues := EmptyStr;
+  sCampos := EmptyStr;
+
+  case Botao of
+    btInserir: oCliente.ProximoCodigo;
+    btAlterar: oCliente.CODIGO := StrToIntDef(EdtCodigo.Text,0);
+  end;
+
+  oCliente.NOME           := Trim(EdtNome.Text);
+  oCliente.CPF_CNPJ       := Trim(EdtCPF_CNPJ.Text);
+  oCliente.RG_IE          := '';
+
+  case rgSituacao.ItemIndex of
+    0: oCliente.ATIVO := 'S';
+    1: oCliente.ATIVO := 'N';
+  end;
+
+  case rgTipoPessoa.ItemIndex of
+    0: oCliente.TIPO_PESSOA := 'F';
+    1: oCliente.TIPO_PESSOA := 'J';
+  end;
+
+  case Botao of
+    btInserir: oCliente.Incluir(cdsTelefones, cdsEnderecos);
+    btAlterar: oCliente.Alterar(cdsTelefones, cdsEnderecos);
+  end;
+end;
+
+function TFrmMntCliente.ValidaCadastro: Boolean;
+begin
+  Result := True;
+
+  if Trim(EdtNome.Text) = EmptyStr then
+  begin
+    TMens.Aviso('Obrigatório o Nome da Pessoa.');
+    PageControlPessoa.ActivePage := tsDadosPessoais;
+    EdtNome.SetFocus;
+    Result := False;
+  end;
+
+  if (cdsTelefones.State in [dsInsert, dsEdit]) then
+  begin
+    PageControlPessoa.ActivePage := tsFones;
+    TMens.Aviso('Obrigatório a finalização do cadastro do Telefone');
+    Result := False;
+  end;
+
+  if EdtCPF_CNPJ.Text <> EmptyStr then
+    EdtCPF_CNPJExit(EdtCPF_CNPJ);
+end;
+
+procedure TFrmMntCliente.ValidaDuplicidadeCPF_CNPJ;
+begin
+  case Botao of
+    btInserir:
+    begin
+      SqlAuxiliar.Close;
+      SqlAuxiliar.SQL.Text := 'SELECT NOME FROM CLIENTES WHERE CPF_CNPJ ='+QuotedStr(Trim(EdtCPF_CNPJ.Text));
+      SqlAuxiliar.Open;
+
+      if not SqlAuxiliar.IsEmpty then
+      begin
+        if not SqlAuxiliar.IsEmpty then
+        begin
+          case rgTipoPessoa.ItemIndex of
+            0: TMens.Aviso(pChar('CPF já associado a '+SqlAuxiliar.FieldByName('NOME').AsString+#13+'Altere o CPF'), True, EdtCPF_CNPJ);
+            1: TMens.Aviso(pChar('CNPJ já associado a '+SqlAuxiliar.FieldByName('NOME').AsString+#13+'Altere o CNPJ'), True, EdtCPF_CNPJ);
+          end;
+        end;
+      end;
+    end;
+
+    btAlterar:
+    begin
+      if Trim(EdtCPF_CNPJ.Text) <> dsDados.DataSet.FieldByName('CPF_CNPJ').AsString then
+      begin
+        SqlAuxiliar.Close;
+        SqlAuxiliar.SQL.Text := 'SELECT NOME FROM CLIENTES WHERE CPF_CNPJ ='+QuotedStr(Trim(EdtCPF_CNPJ.Text));
+        SqlAuxiliar.Open;
+
+        if not SqlAuxiliar.IsEmpty then
+        begin
+          case rgTipoPessoa.ItemIndex of
+            0: TMens.Aviso(pChar('CPF já associado a '+SqlAuxiliar.FieldByName('NOME').AsString), True, EdtCPF_CNPJ);
+            1: TMens.Aviso(pChar('CNPJ já associado a '+SqlAuxiliar.FieldByName('NOME').AsString), True, EdtCPF_CNPJ);
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TFrmMntCliente.ValidaTelefone(Fone: String): String;
+var
+  sFoneRetorno : String;
+begin
+  if Length(Fone) = 11 then
+  begin
+    sFoneRetorno := Copy(Fone,1,3)+' '+Copy(Fone,4);
+    Result := sFoneRetorno;
+  end
+  else
+    Result := Fone;
+end;
+
+end.

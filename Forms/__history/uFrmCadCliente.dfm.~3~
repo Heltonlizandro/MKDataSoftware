@@ -1,0 +1,40 @@
+inherited FrmCadCliente: TFrmCadCliente
+  Caption = 'Cadastro dos Clientes'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Relatorio: TppReport
+    DataPipelineName = 'Pipeline'
+    inherited ppHeaderBand1: TppHeaderBand
+      inherited ppShape1: TppShape
+        LayerName = Foreground
+      end
+      inherited ppSystemVariable1: TppSystemVariable
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+      inherited ppSystemVariable2: TppSystemVariable
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+      inherited ppImage1: TppImage
+        LayerName = Foreground
+      end
+      inherited ppLbEmpresa: TppLabel
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+      inherited ppLbEndereco: TppLabel
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+      inherited ppLbBairrCidCepFone: TppLabel
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+      inherited ppLbRelat_de: TppLabel
+        SaveOrder = -1
+        LayerName = Foreground
+      end
+    end
+  end
+end

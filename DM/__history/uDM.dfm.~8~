@@ -1,0 +1,36 @@
+object DM: TDM
+  OldCreateOrder = False
+  Height = 564
+  Width = 721
+  object Banco: TFDConnection
+    Params.Strings = (
+      'Database=F:\Producao\D_Seattle\ProjetoTesteHelton\BANCO.FDB'
+      'User_Name=SYSDBA'
+      'Password=masterkey'
+      'DriverID=FB')
+    FetchOptions.AssignedValues = [evAutoClose]
+    Connected = True
+    LoginPrompt = False
+    Transaction = Transaction
+    UpdateTransaction = Transaction
+    Left = 72
+    Top = 56
+  end
+  object Transaction: TFDTransaction
+    Connection = Banco
+    Left = 72
+    Top = 120
+  end
+  object SqlAuxiliar: TFDQuery
+    Connection = Banco
+    Transaction = Transaction
+    Left = 152
+    Top = 56
+  end
+  object SqlAux2: TFDQuery
+    Connection = Banco
+    Transaction = Transaction
+    Left = 216
+    Top = 56
+  end
+end

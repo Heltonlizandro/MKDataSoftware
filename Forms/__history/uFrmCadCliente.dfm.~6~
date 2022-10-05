@@ -1,0 +1,77 @@
+inherited FrmCadCliente: TFrmCadCliente
+  Caption = 'Cadastro dos Clientes'
+  ClientHeight = 496
+  ClientWidth = 799
+  ExplicitWidth = 799
+  ExplicitHeight = 496
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PanelBotoes: TPanel
+    Width = 799
+    ExplicitWidth = 0
+    inherited PanelSair: TPanel
+      ExplicitLeft = 197
+    end
+    inherited PanelExportar: TPanel
+      ExplicitLeft = 148
+    end
+  end
+  inherited PanelFiltro: TPanel
+    Width = 799
+    ExplicitWidth = 0
+    object Label1: TLabel
+      Left = 32
+      Top = 16
+      Width = 33
+      Height = 13
+      Caption = 'C'#243'digo'
+    end
+    object Label2: TLabel
+      Left = 32
+      Top = 45
+      Width = 27
+      Height = 13
+      Caption = 'Nome'
+    end
+    object lbCPF_CNPJ: TLabel
+      Left = 176
+      Top = 16
+      Width = 59
+      Height = 13
+      AutoSize = False
+      Caption = 'CPF / CNPJ'
+    end
+    object EdtCodigo: TEdit
+      Left = 76
+      Top = 13
+      Width = 47
+      Height = 21
+      TabOrder = 0
+    end
+    object EdtNome: TEdit
+      Left = 76
+      Top = 42
+      Width = 341
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 1
+    end
+    object EdtCPF_CNPJ: TMaskEdit
+      Left = 240
+      Top = 13
+      Width = 177
+      Height = 21
+      TabOrder = 2
+      Text = ''
+    end
+  end
+  inherited PanelGrid: TPanel
+    Width = 799
+    Height = 378
+    ExplicitWidth = 0
+    inherited GridDados: TRxDBGrid
+      Width = 797
+      Height = 376
+    end
+  end
+end
