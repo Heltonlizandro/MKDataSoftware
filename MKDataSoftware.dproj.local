@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/11/02 17:15:55.000.933,=C:\Users\User\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 11:39:45.000.330,=C:\Users\User\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 11:40:28.000.745,C:\Users\User\Documents\Embarcadero\Studio\Projects\Unit1.dfm=F:\Producao\D_Seattle\ProjetoTesteHelton\uFrmPrincipal.dfm</Transaction>
+    <Transaction>2022/10/03 11:40:28.000.745,C:\Users\User\Documents\Embarcadero\Studio\Projects\Unit1.pas=F:\Producao\D_Seattle\ProjetoTesteHelton\uFrmPrincipal.pas</Transaction>
+    <Transaction>2022/10/03 11:40:47.000.340,C:\Users\User\Documents\Embarcadero\Studio\Projects\Project1.dproj=F:\Producao\D_Seattle\ProjetoTesteHelton\MKDataSoftware.dproj</Transaction>
+    <Transaction>2022/10/03 11:41:32.000.487,=F:\Producao\D_Seattle\ProjetoTesteHelton\Padrao\uFrmPadrao.pas</Transaction>
+    <Transaction>2022/10/03 12:02:07.000.173,=F:\Producao\D_Seattle\ProjetoTesteHelton\Objetos\F_Funcao.pas</Transaction>
+    <Transaction>2022/10/03 12:02:09.000.226,=F:\Producao\D_Seattle\ProjetoTesteHelton\Objetos\Form_DialogoMensagem.pas</Transaction>
+    <Transaction>2022/10/03 12:02:09.000.441,=F:\Producao\D_Seattle\ProjetoTesteHelton\Objetos\Form_DialogoPadrao.pas</Transaction>
+    <Transaction>2022/10/03 12:05:02.000.217,=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 12:05:21.000.751,F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas=F:\Producao\D_Seattle\ProjetoTesteHelton\DM\uDM.pas</Transaction>
+    <Transaction>2022/10/03 12:05:21.000.751,F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.dfm=F:\Producao\D_Seattle\ProjetoTesteHelton\DM\uDM.dfm</Transaction>
+    <Transaction>2022/10/03 12:07:12.000.040,=F:\Producao\D_Seattle\ProjetoTesteHelton\Padrao\uFrmCadPadrao.pas</Transaction>
+    <Transaction>2022/10/03 15:39:01.000.905,=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 15:39:40.000.110,F:\Producao\D_Seattle\ProjetoTesteHelton\Forms\uFrmCadCliente.pas=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 15:39:40.000.110,F:\Producao\D_Seattle\ProjetoTesteHelton\Forms\uFrmCadCliente.dfm=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.dfm</Transaction>
+    <Transaction>2022/10/03 16:09:28.000.999,=F:\Producao\D_Seattle\ProjetoTesteHelton\Padrao\uFrmMenuPadrao.pas</Transaction>
+    <Transaction>2022/10/03 16:22:41.000.924,=F:\Producao\D_Seattle\ProjetoTesteHelton\Padrao\uFrmMntPadrao.pas</Transaction>
+    <Transaction>2022/10/03 16:23:38.000.597,=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 16:23:55.000.097,F:\Producao\D_Seattle\ProjetoTesteHelton\Forms\uFrmMntCliente.pas=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.pas</Transaction>
+    <Transaction>2022/10/03 16:23:55.000.097,F:\Producao\D_Seattle\ProjetoTesteHelton\Forms\uFrmMntCliente.dfm=F:\Producao\D_Seattle\ProjetoTesteHelton\Unit1.dfm</Transaction>
+    <Transaction>2022/10/03 17:35:00.000.292,=F:\Producao\D_Seattle\ProjetoTesteHelton\Padrao\uFrmPesquisa.pas</Transaction>
+  </Transactions>
+</BorlandProject>
